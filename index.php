@@ -46,6 +46,10 @@ $tasks = [
         "is_completed" => false
     ]
 ];
+
+function getProjectTaskCount(string $project_name, array $tasks): int {
+    return count(array_keys(array_column($tasks, "project"), $project_name));
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -90,7 +94,7 @@ $tasks = [
                         <?php foreach ($projects as $project): ?>
                             <li class="main-navigation__list-item">
                                 <a class="main-navigation__list-item-link" href="#"><?= $project ?></a>
-                                <span class="main-navigation__list-item-count">0</span>
+                                <span class="main-navigation__list-item-count"><?= getProjectTaskCount($project, $tasks) ?></span>
                             </li>
                         <?php endforeach; ?>
                     </ul>
