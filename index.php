@@ -1,17 +1,21 @@
 <?php
-require_once("config.php");
-require_once("helpers.php");
-require_once("data.php");
-
 /**
- * @var $projects array<string> - массив проектов
+ * Сценарий главной страницы
+ * @var $connect mysqli - подключение к базе данных
  * @var $tasks array<array{title:string, deadline:string, project:string, is_complited:bool}> - массив задач по проектам
  * @var $show_complete_tasks bool - статус отображения выполненных задач
  */
+
+require_once("config.php");
+require_once("db.php");
+require_once("helpers.php");
+
+$user_id = 2;
+
 $main_template = include_template("main.php", [
-    "projects" => $projects,
-    "tasks" => $tasks,
-    "show_complete_tasks" => $show_complete_tasks,
+    "projects" => normalizeProjects(getUserProjects($connect, $user_id)),
+    "tasks" => normalizeTasks(getUserTasks($connect, $user_id)),
+    "show_complete_tasks" => rand(0, 1),
 ]);
 
 $layout_template = include_template("layout.php", [

@@ -126,7 +126,7 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template(string $name, array $data = []): string {
     $name = 'templates/' . $name;
     $result = '';
 
@@ -138,25 +138,23 @@ function include_template($name, array $data = []) {
     extract($data);
     require $name;
 
-    $result = ob_get_clean();
-
-    return $result;
+    return ob_get_clean();
 }
 
 /**
  * Возвращает общее количество задач для переданого проекта
- * @param string $project_name Имя проекта
+ * @param string $project_id Идентификатор проекта
  * @param array $tasks Массив со всеми задачами
  * @return int Общее количество задач по проекту
  */
-function getProjectTaskCount(string $project_name, array $tasks): int {
-    return count(array_keys(array_column($tasks, "project"), $project_name));
+function getProjectTaskCount(string $project_id, array $tasks): int {
+    return count(array_keys(array_column($tasks, "project_id"), $project_id));
 }
 
 /**
  * Вычисляет остаток часов до дедлайна
  * @param string|null $deadline Дата дедлайна
- * @return int|null количество часов до дедлайна
+ * @return int|null Количество часов до дедлайна
  */
 function getRestOfTime(string | null $deadline): int | null {
     $deadline_timestamp = strtotime($deadline);
@@ -169,4 +167,77 @@ function getRestOfTime(string | null $deadline): int | null {
     $current_date_timestamp = date_timestamp_get($current_date);
 
     return floor(($deadline_timestamp - $current_date_timestamp) / 3600);
+}
+
+/**
+ * Функция-адаптер для проекта
+ * @param array $project Данные по проекту пользователя из базы
+ * @return array Отформатированный проект для вывода на сайт
+ */
+function normalizeProject(array $project): array
+{
+    if ($project === []) {
+        return $project;
+    }
+
+    return [
+        "id" => (string) $project["id"],
+        "title" => $project["title"],
+    ];
+}
+
+/**
+ * Функция-адаптер для массива проектов
+ * @param array $projects Массив данных по проекту пользователя из базы
+ * @return array Отформатированный массив проектов для вывода на сайт
+ */
+function normalizeProjects(array $projects): array
+{
+    $result = [];
+
+    foreach ($projects as $project) {
+        $result[] = normalizeProject($project);
+    }
+
+    return $result;
+}
+
+/**
+ * Функция-адаптер для задачи
+ * @param array $task Данные по задаче пользователя из базы
+ * @return array Отформатированная задача для вывода на сайт
+ */
+function normalizeTask(array $task): array
+{
+    if ($task === []) {
+        return $task;
+    }
+
+    $deadline = $task["deadline"] ? date_format(date_create($task["deadline"]),"d.m.Y") : null;
+
+    return [
+        "id" => (string) $task["id"],
+        "title" => $task["title"],
+        "is_completed" => (bool) $task["status"],
+        "deadline" => $deadline,
+        "project" => $task["project"],
+        "project_id" => (string) $task["project_id"],
+        "file_path" => $task["file_path"],
+    ];
+}
+
+/**
+ * Функция-адаптер для массива задач
+ * @param array $tasks Массив данных по задачам пользователя из базы
+ * @return array Отформатированный массив задач для вывода на сайт
+ */
+function normalizeTasks(array $tasks): array
+{
+    $result = [];
+
+    foreach ($tasks as $task) {
+        $result[] = normalizeTask($task);
+    }
+
+    return $result;
 }
