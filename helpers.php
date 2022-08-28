@@ -1,4 +1,7 @@
 <?php
+
+use JetBrains\PhpStorm\NoReturn;
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -240,4 +243,184 @@ function normalizeTasks(array $tasks): array
     }
 
     return $result;
+}
+
+/**
+ * Функция для проверки заполнения поля
+ * @param string $field_name Идентификатор поля
+ * @param string $field_title Представление поля
+ * @return string Описание ошибки
+ */
+function checkFilling(string $field_name, string $field_title): string
+{
+    $error_message = "";
+    if (isset($_POST[$field_name]) && trim($_POST[$field_name]) === "") {
+        $error_message = $field_title . ". Это поле должно быть заполнено.";
+    }
+
+    return $error_message;
+}
+
+/**
+ * Функция для проверки заполнения длины поля
+ * @param string $text Контент текстового поля
+ * @param string $field_title Представление поля
+ * @param int $length Максимальная длина поля
+ * @return string Описание ошибки
+ */
+function checkLength(string $text, string $field_title, int $length): string
+{
+    $error_message = "";
+    if (mb_strlen($text, "UTF-8") > $length) {
+        $error_message = $field_title . ". Длина этого поля не может превышать " . $length . " символов";
+    }
+
+    return $error_message;
+}
+
+/**
+ * Функция добавления ошибки заполнения формы
+ * @param array $errors Массив с ошибками
+ * @param string $error_message Описание ошибки
+ * @param string $field_name Идентификатор поля
+ * @return array Массив с ошибками
+ */
+function addError(array $errors, string $error_message, string $field_name): array
+{
+    if ($error_message !== "") {
+        $errors[$field_name][] = $error_message;
+    }
+
+    return $errors;
+}
+
+/**
+ * Функция для получения полного пути хранения файла
+ * @param string $full_path Полный путь до директории
+ * @param string $file_name Имя файла
+ * @return string Полный путь для сохранения файла
+ */
+function getFilePath(string $full_path, string $file_name): string
+{
+    return $full_path . basename($file_name);
+}
+
+/**
+ * Функция для загрузки файла переданного с компьютера
+ * @param string $tmp_path Временный путь хранения файла
+ * @param string $full_path Полный путь до директории
+ * @param string $file_name Имя файла
+ * @return void Ничего не возвращает
+ */
+function downloadFile(string $tmp_path, string $full_path, string $file_name): void
+{
+    if ($tmp_path !== "") {
+        $file_path = getFilePath($full_path, $file_name);
+        move_uploaded_file($tmp_path, $file_path);
+    }
+}
+
+/**
+ * Функция для обработки файла загруженного с компьютера
+ * @param string $web_name Имя поля хранения файла в запросе
+ * @param string $field Имя поля для сохранения в базу
+ * @param array $result Результат обработки файла
+ * @param string $uploads_dir Директория сохранения файла
+ * @return array Результат обработки файла
+ */
+function addFile(string $web_name, string $field, array $result, string $uploads_dir): array
+{
+    if (!isset($_FILES[$web_name]) || $_FILES[$web_name]["error"] !== 0) {
+        return $result;
+    }
+
+    $file = $_FILES[$web_name];
+
+    $result[$field] = $uploads_dir . $file["name"];
+    $result["file_name"] = $file["name"];
+    $result["tmp_path"] = $file["tmp_name"];
+
+    return $result;
+}
+
+/**
+ * Функция для обработки текста
+ * @param string $web_name Индентификатор поля в POST запросе
+ * @param array $result Результат проверки полей
+ * @param string $field Идентификатор поля в базе
+ * @param string $field_title Представление поля
+ * @param bool $required_empty_field Включить проверку незаполненного значения
+ * @param int $length Максимальная длина содержимого поля
+ * @return array Результат проверки полей
+ */
+function addTextContent(string $web_name, array $result, string $field, string $field_title,
+    bool $required_empty_field, int $length = 1000): array
+{
+    if ($required_empty_field) {
+        $result["errors"] = addError(
+            $result["errors"],
+            checkFilling($web_name, $field_title),
+            $web_name
+        );
+    }
+
+    $result["errors"] = addError(
+        $result["errors"],
+        checkLength($_POST[$web_name], $field_title, $length),
+        $web_name
+    );
+
+    $result[$field] = $_POST[$web_name] ?? "";
+
+    return $result;
+}
+
+/**
+ * Функция проверки существования проекта
+ * @param string $project_id Индентификатор проекта
+ * @param array $projects Массив существующих проектов
+ * @return bool Результат проверки проекта
+ */
+function isExistProject(string $project_id, array $projects): bool {
+    return in_array($project_id, array_column($projects, "id"));
+}
+
+/**
+ * Функция для проверки и добавления даты
+ * @param string $web_name Индентификатор поля в POST запросе
+ * @param array $result Результат проверки полей
+ * @param string $field Имя поля в базе данных
+ * @return array Результат проверки полей
+ */
+function addDate(string $web_name, array $result, string $field): array {
+    $post_date = $_POST[$web_name];
+
+    if (!$post_date) {
+        return $result;
+    }
+
+    $pattern = '/^[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])$/';
+
+    if (!preg_match($pattern, $post_date)) {
+        $result["errors"] = addError(
+            $result["errors"],
+            "Неверный формат даты",
+            $web_name
+        );
+    }
+
+    $result[$field] = $_POST[$web_name] ?? null;
+
+    return $result;
+}
+
+/**
+ * Функция для перенаправления на другую страницу
+ * @param string $page Страница перенаправления
+ * @return void
+ */
+#[NoReturn] function redirectTo(string $page): void
+{
+    header("Location: $page");
+    exit();
 }

@@ -12,7 +12,7 @@ $user_id = 2;
 $project_id = (string) (filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_SPECIAL_CHARS) ?? null);
 $projects = normalizeProjects(getUserProjects($connect, $user_id));
 
-if ($project_id && !in_array($project_id, array_column($projects, "id"))) {
+if ($project_id && !isExistProject($project_id, $projects)) {
     http_response_code(404);
     die();
 }
