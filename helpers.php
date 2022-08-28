@@ -142,3 +142,13 @@ function include_template($name, array $data = []) {
 
     return $result;
 }
+
+/**
+ * Возвращает общее количество задач для переданого проекта
+ * @param string $project_name Имя проекта
+ * @param array $tasks Массив со всеми задачами
+ * @return int Общее количество задач по проекту
+ */
+function getProjectTaskCount(string $project_name, array $tasks): int {
+    return count(array_keys(array_column($tasks, "project"), $project_name));
+}

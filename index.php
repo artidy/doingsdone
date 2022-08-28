@@ -1,52 +1,21 @@
 <?php
-// показывать или нет выполненные задачи
-$show_complete_tasks = rand(0, 1);
-$projects = [
-    "Входящие",
-    "Учеба",
-    "Работа",
-    "Домашние дела",
-    "Авто"
-];
-$tasks = [
-    [
-        "title" => "Собеседование в IT компании",
-        "deadline" => "01.12.2019",
-        "project" => "Работа",
-        "is_completed" => false
-    ],
-    [
-        "title" => "Выполнить тестовое задание",
-        "deadline" => "25.12.2019",
-        "project" => "Работа",
-        "is_completed" => false
-    ],
-    [
-        "title" => "Сделать задание первого раздела",
-        "deadline" => "21.12.2019",
-        "project" => "Учеба",
-        "is_completed" => true
-    ],
-    [
-        "title" => "Встреча с другом",
-        "deadline" => "22.12.2019",
-        "project" => "Входящие",
-        "is_completed" => false
-    ],
-    [
-        "title" => "Купить корм для кота",
-        "deadline" => null,
-        "project" => "Домашние дела",
-        "is_completed" => false
-    ],
-    [
-        "title" => "Заказать пиццу",
-        "deadline" => null,
-        "project" => "Домашние дела",
-        "is_completed" => false
-    ]
-];
+require_once("helpers.php");
+require_once("data.php");
 
-function getProjectTaskCount(string $project_name, array $tasks): int {
-    return count(array_keys(array_column($tasks, "project"), $project_name));
-}
+/**
+ * @var $projects array<string> - массив проектов
+ * @var $tasks array<array{title:string, deadline:string, project:string, is_complited:bool}> - массив задач по проектам
+ * @var $show_complete_tasks bool - статус отображения выполненных задач
+ */
+$main_template = include_template("main.php", [
+    "projects" => $projects,
+    "tasks" => $tasks,
+    "show_complete_tasks" => $show_complete_tasks,
+]);
+
+$layout_template = include_template("layout.php", [
+    "title" => "Дела в порядке",
+    "template" => $main_template,
+]);
+
+print($layout_template);
