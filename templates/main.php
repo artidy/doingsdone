@@ -15,8 +15,15 @@
         <ul class="main-navigation__list">
             <?php foreach ($projects as $project): ?>
                 <li class="main-navigation__list-item">
-                    <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($project["title"]); ?></a>
-                    <span class="main-navigation__list-item-count"><?=getProjectTaskCount($project["id"], $tasks); ?></span>
+                    <a
+                        class="main-navigation__list-item-link"
+                        href="/?project_id=<?=$project["id"]?>"
+                    >
+                        <?=htmlspecialchars($project["title"]); ?>
+                    </a>
+                    <span class="main-navigation__list-item-count">
+                        <?=getProjectTaskCount($project["id"], $tasks); ?>
+                    </span>
                 </li>
             <?php endforeach; ?>
         </ul>
