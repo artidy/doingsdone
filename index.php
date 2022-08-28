@@ -2,8 +2,6 @@
 /**
  * Сценарий главной страницы
  * @var $connect mysqli - подключение к базе данных
- * @var $tasks array<array{title:string, deadline:string, project:string, is_complited:bool}> - массив задач по проектам
- * @var $show_complete_tasks bool - статус отображения выполненных задач
  */
 
 require_once("config.php");
@@ -14,16 +12,25 @@ $user_id = 2;
 $project_id = (string) (filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_SPECIAL_CHARS) ?? null);
 $projects = normalizeProjects(getUserProjects($connect, $user_id));
 
-if ($project_id && !in_array($project_id, array_column($projects, "id"))) {
+if ($project_id && !isExistProject($project_id, $projects)) {
     http_response_code(404);
     die();
 }
 
+$show_complete_tasks = rand(0, 1);
+
+$tasks_content = include_template("tasks.php", [
+    "projects" => $projects,
+    "tasks" => normalizeTasks(getUserTasks($connect, $user_id)),
+    "show_complete_tasks" => $show_complete_tasks,
+    "project_id" => $project_id,
+]);
+
 $main_template = include_template("main.php", [
     "projects" => $projects,
     "tasks" => normalizeTasks(getUserTasks($connect, $user_id)),
-    "show_complete_tasks" => rand(0, 1),
     "project_id" => $project_id,
+    "main_content" => $tasks_content,
 ]);
 
 $layout_template = include_template("layout.php", [
