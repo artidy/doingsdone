@@ -248,14 +248,13 @@ function normalizeTasks(array $tasks): array
 /**
  * Функция для проверки заполнения поля
  * @param string $field_name Идентификатор поля
- * @param string $field_title Представление поля
  * @return string Описание ошибки
  */
-function checkFilling(string $field_name, string $field_title): string
+function checkFilling(string $field_name): string
 {
     $error_message = "";
     if (isset($_POST[$field_name]) && trim($_POST[$field_name]) === "") {
-        $error_message = $field_title . ". Это поле должно быть заполнено.";
+        $error_message = "Это поле должно быть заполнено.";
     }
 
     return $error_message;
@@ -264,15 +263,14 @@ function checkFilling(string $field_name, string $field_title): string
 /**
  * Функция для проверки заполнения длины поля
  * @param string $text Контент текстового поля
- * @param string $field_title Представление поля
  * @param int $length Максимальная длина поля
  * @return string Описание ошибки
  */
-function checkLength(string $text, string $field_title, int $length): string
+function checkLength(string $text, int $length): string
 {
     $error_message = "";
     if (mb_strlen($text, "UTF-8") > $length) {
-        $error_message = $field_title . ". Длина этого поля не может превышать " . $length . " символов";
+        $error_message = "Длина этого поля не может превышать " . $length . " символов";
     }
 
     return $error_message;
@@ -348,25 +346,24 @@ function addFile(string $web_name, string $field, array $result, string $uploads
  * @param string $web_name Индентификатор поля в POST запросе
  * @param array $result Результат проверки полей
  * @param string $field Идентификатор поля в базе
- * @param string $field_title Представление поля
  * @param bool $required_empty_field Включить проверку незаполненного значения
  * @param int $length Максимальная длина содержимого поля
  * @return array Результат проверки полей
  */
-function addTextContent(string $web_name, array $result, string $field, string $field_title,
+function addTextContent(string $web_name, array $result, string $field,
     bool $required_empty_field, int $length = 1000): array
 {
     if ($required_empty_field) {
         $result["errors"] = addError(
             $result["errors"],
-            checkFilling($web_name, $field_title),
+            checkFilling($web_name),
             $web_name
         );
     }
 
     $result["errors"] = addError(
         $result["errors"],
-        checkLength($_POST[$web_name], $field_title, $length),
+        checkLength($_POST[$web_name], $length),
         $web_name
     );
 

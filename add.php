@@ -18,6 +18,8 @@ $result = [
     "project_id" => "",
     "author_id" => $user_id,
     "errors" => [],
+    "tmp_path" => "",
+    "file_name" => "",
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -25,8 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $full_path = __DIR__ . $uploads_dir;
     $project_id = $_POST["project"];
 
-    $result = addTextContent("name", $result, "title", "Название", true, 125);
-    $result = addTextContent("project", $result, "project_id", "Проект", true);
+    $result = addTextContent("name", $result, "title", true, 125);
+    $result = addTextContent("project", $result, "project_id", true);
     $result = addFile("file", "file_path", $result, $uploads_dir);
     $result = addDate("date", $result, "deadline");
 
@@ -59,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $add_content = include_template("add.php", [
     "projects" => $projects,
-    "errors" => $errors,
+    "result" => $result,
 ]);
 
 $main_template = include_template("main.php", [
