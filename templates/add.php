@@ -57,7 +57,7 @@ $errors = $result["errors"];
             type="text"
             name="date"
             id="date"
-            value=""
+            value="<?=$result["deadline"] ?? "";?>"
             placeholder="Введите дату в формате ГГГГ-ММ-ДД"
         >
         <?=include_template("error.php", [
