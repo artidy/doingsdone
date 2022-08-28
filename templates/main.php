@@ -14,8 +14,8 @@
         <ul class="main-navigation__list">
             <?php foreach ($projects as $project): ?>
                 <li class="main-navigation__list-item">
-                    <a class="main-navigation__list-item-link" href="#"><?= $project ?></a>
-                    <span class="main-navigation__list-item-count"><?= getProjectTaskCount($project, $tasks) ?></span>
+                    <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($project); ?></a>
+                    <span class="main-navigation__list-item-count"><?=getProjectTaskCount($project, $tasks); ?></span>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -46,7 +46,7 @@
             <input
                 class="checkbox__input visually-hidden show_completed"
                 type="checkbox"
-                <?= $show_complete_tasks ? "checked" : "" ?>
+                <?=$show_complete_tasks ? "checked" : ""; ?>
             >
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
@@ -58,18 +58,18 @@
                 continue;
             }
             ?>
-            <tr class="tasks__item task <?= $task["is_completed"] ? "task--completed" : "" ?>">
+            <tr class="tasks__item task <?=$task["is_completed"] ? "task--completed" : ""; ?>">
                 <td class="task__select">
                     <label class="checkbox task__checkbox">
                         <input
                             class="checkbox__input visually-hidden"
                             type="checkbox"
-                            <?= $task["is_completed"] ? "checked" : "" ?>
+                            <?=$task["is_completed"] ? "checked" : ""; ?>
                         >
-                        <span class="checkbox__text"><?= $task["title"] ?></span>
+                        <span class="checkbox__text"><?=htmlspecialchars($task["title"]); ?></span>
                     </label>
                 </td>
-                <td class="task__date"><?= $task["deadline"] ?></td>
+                <td class="task__date"><?=htmlspecialchars($task["deadline"]); ?></td>
 
                 <td class="task__controls">
                 </td>

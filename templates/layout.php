@@ -11,14 +11,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?=$title; ?></title>
+    <title><?=htmlspecialchars($title); ?></title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
 <body>
-<h1 class="visually-hidden"><?=$title; ?></h1>
+<h1 class="visually-hidden"><?=htmlspecialchars($title); ?></h1>
 
 <div class="page-wrapper">
     <div class="container container--with-sidebar">
