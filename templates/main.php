@@ -57,8 +57,14 @@
             if ($task["is_completed"] && !$show_complete_tasks) {
                 continue;
             }
+
+            $restOfTime = getRestOfTime($task["deadline"]);
             ?>
-            <tr class="tasks__item task <?=$task["is_completed"] ? "task--completed" : ""; ?>">
+            <tr
+                class="tasks__item task
+                    <?=$task["is_completed"] ? "task--completed" : ""; ?>
+                    <?=!$task["is_completed"] && $restOfTime && $restOfTime <= 24 ? "task--important" : ""; ?>"
+            >
                 <td class="task__select">
                     <label class="checkbox task__checkbox">
                         <input
