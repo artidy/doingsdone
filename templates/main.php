@@ -2,8 +2,9 @@
 /**
  * Шаблон главной страницы сайта
  *
- * @var $projects array<array{id:int, title:string}> - массив проектов
- * @var $tasks array<array{title:string, deadline:string, project:string, is_complited:bool}> - массив задач по проектам
+ * @var $projects array<array{id:string, title:string}> - массив проектов
+ * @var $tasks array<array{id:string, title:string, deadline:string,
+ *     project:string, is_complited:bool, project_id:string, file_path:string}> - массив задач по проектам
  * @var $show_complete_tasks bool - статус отображения выполненных задач
  */
 ?>
@@ -15,7 +16,7 @@
             <?php foreach ($projects as $project): ?>
                 <li class="main-navigation__list-item">
                     <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($project["title"]); ?></a>
-                    <span class="main-navigation__list-item-count"><?=getProjectTaskCount($project["title"], $tasks); ?></span>
+                    <span class="main-navigation__list-item-count"><?=getProjectTaskCount($project["id"], $tasks); ?></span>
                 </li>
             <?php endforeach; ?>
         </ul>

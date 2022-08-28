@@ -9,12 +9,13 @@
 require_once("config.php");
 require_once("db.php");
 require_once("helpers.php");
-require_once("data.php");
+
+$user_id = 2;
 
 $main_template = include_template("main.php", [
-    "projects" => getUserProjects($connect, 2),
-    "tasks" => $tasks,
-    "show_complete_tasks" => $show_complete_tasks,
+    "projects" => normalizeProjects(getUserProjects($connect, $user_id)),
+    "tasks" => normalizeTasks(getUserTasks($connect, $user_id)),
+    "show_complete_tasks" => rand(0, 1),
 ]);
 
 $layout_template = include_template("layout.php", [

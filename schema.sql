@@ -36,7 +36,7 @@ CREATE TABLE tasks
   title          VARCHAR(125) NOT NULL,
   status         BOOLEAN DEFAULT FALSE,
   deadline       DATE,
-  file           VARCHAR(125),
+  file_path      VARCHAR(125),
   project_id     INT NOT NULL,
   author_id      INT NOT NULL,
   FOREIGN KEY (project_id) REFERENCES projects (id),
