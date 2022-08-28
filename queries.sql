@@ -23,3 +23,29 @@ VALUES ('Собеседование в IT компании', false, '2022-08-29'
        ('Встреча с другом', false, '2022-08-30', 1, 2),
        ('Купить корм для кота', false, null, 4, 1),
        ('Заказать пиццу', false, null, 4, 1);
+
+-- Получаем список из всех проектов для пользователя под идентификатором 1
+SELECT id,
+       title
+FROM projects
+WHERE author_id = 1;
+
+-- Получить список из всех задач для проекта под идентификатором 3
+SELECT tasks.id,
+       tasks.title,
+       deadline,
+       projects.title as project,
+       status as is_completed
+FROM tasks
+  INNER JOIN projects on tasks.project_id = projects.id
+WHERE project_id = 3;
+
+-- Помечаем задачу под идентификатором 2 как выполненную
+UPDATE tasks
+SET status = true
+WHERE id = 2;
+
+-- Обновляем заголовок задачи под идентификатором 6
+UPDATE tasks
+SET title = 'Новый заголовок задачи'
+WHERE id = 6;
