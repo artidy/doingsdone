@@ -406,6 +406,17 @@ function addDate(string $web_name, array $result, string $field): array {
         );
     }
 
+    $current_date_timestamp = date_create("today")->getTimestamp();
+    $date_timestamp = strtotime($post_date);
+
+    if ($current_date_timestamp > $date_timestamp) {
+        $result["errors"] = addError(
+            $result["errors"],
+            "Нельзя указывать дату меньше текущей",
+            $web_name
+        );
+    }
+
     $result[$field] = $_POST[$web_name] ?? null;
 
     return $result;
