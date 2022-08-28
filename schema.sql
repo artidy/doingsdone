@@ -8,3 +8,43 @@ DATABASE doingsdone
 
 USE
 doingsdone;
+
+CREATE TABLE users
+(
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  email         VARCHAR(320) UNIQUE NOT NULL,
+  name          VARCHAR(128)  NOT NULL,
+  password      VARCHAR(1000) NOT NULL,
+  registered_at DATETIME  NOT NULL
+);
+
+CREATE TABLE projects
+(
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  title         VARCHAR(125)  NOT NULL,
+  author_id     INT NOT NULL,
+  FOREIGN KEY (author_id) REFERENCES users (id)
+);
+/*
+  Внешний ключ author_id нужен для контроля целостности данных,
+    чтобы нельзя было удалить пользователя, если у него есть проекты.
+*/
+
+CREATE TABLE tasks
+(
+  id             INT AUTO_INCREMENT PRIMARY KEY,
+  title          VARCHAR(125) NOT NULL,
+  deadline       DATE,
+  file           VARCHAR(125),
+  project_id     INT  NOT NULL,
+  author_id      INT  NOT NULL,
+  FOREIGN KEY (project_id) REFERENCES projects (id),
+  FOREIGN KEY (author_id) REFERENCES users (id)
+);
+
+/*
+  Внешний ключ project_id нужен для контроля целостности данных,
+    чтобы нельзя было удалить проект, если у него есть задачи.
+  Внешний ключ author_id нужен для контроля целостности данных,
+    чтобы нельзя было удалить пользователя, если у него есть задачи.
+*/
