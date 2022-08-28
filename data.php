@@ -11,7 +11,7 @@ $projects = [
 $tasks = [
     [
         "title" => "Собеседование в IT компании",
-        "deadline" => "01.12.2019",
+        "deadline" => "29.08.2022",
         "project" => "Работа",
         "is_completed" => false
     ],
@@ -29,7 +29,7 @@ $tasks = [
     ],
     [
         "title" => "Встреча с другом",
-        "deadline" => "22.12.2019",
+        "deadline" => "30.08.2022",
         "project" => "Входящие",
         "is_completed" => false
     ],
