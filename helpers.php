@@ -152,3 +152,21 @@ function include_template($name, array $data = []) {
 function getProjectTaskCount(string $project_name, array $tasks): int {
     return count(array_keys(array_column($tasks, "project"), $project_name));
 }
+
+/**
+ * Вычисляет остаток часов до дедлайна
+ * @param string|null $deadline Дата дедлайна
+ * @return int|null количество часов до дедлайна
+ */
+function getRestOfTime(string | null $deadline): int | null {
+    $deadline_timestamp = strtotime($deadline);
+
+    if (!$deadline_timestamp) {
+        return null;
+    }
+
+    $current_date = date_create();
+    $current_date_timestamp = date_timestamp_get($current_date);
+
+    return floor(($deadline_timestamp - $current_date_timestamp) / 3600);
+}
