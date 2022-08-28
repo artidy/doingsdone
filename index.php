@@ -11,11 +11,19 @@ require_once("db.php");
 require_once("helpers.php");
 
 $user_id = 2;
+$project_id = (string) (filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_SPECIAL_CHARS) ?? null);
+$projects = normalizeProjects(getUserProjects($connect, $user_id));
+
+if ($project_id && !in_array($project_id, array_column($projects, "id"))) {
+    http_response_code(404);
+    die();
+}
 
 $main_template = include_template("main.php", [
-    "projects" => normalizeProjects(getUserProjects($connect, $user_id)),
+    "projects" => $projects,
     "tasks" => normalizeTasks(getUserTasks($connect, $user_id)),
     "show_complete_tasks" => rand(0, 1),
+    "project_id" => $project_id,
 ]);
 
 $layout_template = include_template("layout.php", [
