@@ -7,7 +7,7 @@ DATABASE doingsdone
   DEFAULT COLLATE utf8_general_ci;
 
 USE
-doingsdone;
+  doingsdone;
 
 CREATE TABLE users
 (
@@ -34,6 +34,7 @@ CREATE TABLE tasks
 (
   id             INT AUTO_INCREMENT PRIMARY KEY,
   title          VARCHAR(125) NOT NULL,
+  status         BOOLEAN DEFAULT FALSE,
   deadline       DATE,
   file           VARCHAR(125),
   project_id     INT NOT NULL,
