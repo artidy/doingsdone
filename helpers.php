@@ -170,3 +170,36 @@ function getRestOfTime(string | null $deadline): int | null {
 
     return floor(($deadline_timestamp - $current_date_timestamp) / 3600);
 }
+
+/**
+ * Функция-адаптер для проекта
+ * @param array $project
+ * @return array
+ */
+function normalizeProject(array $project): array
+{
+    if ($project === []) {
+        return $project;
+    }
+
+    return [
+        "id" => (string) $project["id"],
+        "title" => $project["title"],
+    ];
+}
+
+/**
+ * Функция-адаптер для массива проектов
+ * @param array $projects
+ * @return array
+ */
+function normalizeProjects(array $projects): array
+{
+    $result = [];
+
+    foreach ($projects as $project) {
+        $result[] = normalizeProject($project);
+    }
+
+    return $result;
+}

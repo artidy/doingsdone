@@ -1,7 +1,7 @@
 <?php
 /**
  * Сценарий главной страницы
- * @var $projects array<string> - массив проектов
+ * @var $connect mysqli - подключение к базе данных
  * @var $tasks array<array{title:string, deadline:string, project:string, is_complited:bool}> - массив задач по проектам
  * @var $show_complete_tasks bool - статус отображения выполненных задач
  */
@@ -12,7 +12,7 @@ require_once("helpers.php");
 require_once("data.php");
 
 $main_template = include_template("main.php", [
-    "projects" => $projects,
+    "projects" => getUserProjects($connect, 2),
     "tasks" => $tasks,
     "show_complete_tasks" => $show_complete_tasks,
 ]);
