@@ -6,6 +6,7 @@
  * @var $tasks array<array{id:string, title:string, deadline:string,
  *     project:string, is_complited:bool, project_id:string, file_path:string}> - массив задач по проектам
  * @var $show_complete_tasks bool - статус отображения выполненных задач
+ * @var $project_id string - идентификатор выбранного проекта
  */
 ?>
 <section class="content__side">
@@ -14,7 +15,9 @@
     <nav class="main-navigation">
         <ul class="main-navigation__list">
             <?php foreach ($projects as $project): ?>
-                <li class="main-navigation__list-item">
+                <li class="main-navigation__list-item
+                        <?=$project_id === $project["id"] ? "main-navigation__list-item--active" : "" ?>"
+                >
                     <a
                         class="main-navigation__list-item-link"
                         href="/?project_id=<?=$project["id"]?>"
@@ -62,7 +65,8 @@
 
     <table class="tasks">
         <?php foreach ($tasks as $task):
-            if ($task["is_completed"] && !$show_complete_tasks) {
+            if ($task["is_completed"] && !$show_complete_tasks ||
+                $project_id !== "" && $task["project_id"] !== $project_id) {
                 continue;
             }
 

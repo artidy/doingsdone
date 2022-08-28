@@ -11,11 +11,13 @@ require_once("db.php");
 require_once("helpers.php");
 
 $user_id = 2;
+$project_id = (string) (filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_SPECIAL_CHARS) ?? "");
 
 $main_template = include_template("main.php", [
     "projects" => normalizeProjects(getUserProjects($connect, $user_id)),
     "tasks" => normalizeTasks(getUserTasks($connect, $user_id)),
     "show_complete_tasks" => rand(0, 1),
+    "project_id" => $project_id,
 ]);
 
 $layout_template = include_template("layout.php", [
