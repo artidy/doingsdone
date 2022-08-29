@@ -18,18 +18,18 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body>
+<body <?= isset($user) ? "" : "class='body-background'"; ?>>
 <h1 class="visually-hidden"><?=htmlspecialchars($title); ?></h1>
 
 <div class="page-wrapper">
-    <div class="container container--with-sidebar">
+    <div class="container <?= isset($user) ? "container--with-sidebar" : ""; ?>">
         <header class="main-header">
             <a href="/">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
 
-            <?php if (isset($user)): ?>
-                <div class="main-header__side">
+            <div class="main-header__side">
+                <?php if (isset($user)): ?>
                     <a class="main-header__side-item button button--plus open-modal" href="add">Добавить задачу</a>
 
                     <div class="main-header__side-item user-menu">
@@ -39,8 +39,10 @@
                             <a href="#">Выйти</a>
                         </div>
                     </div>
-                </div>
-            <?php endif; ?>
+                <?php else: ?>
+                    <a class="main-header__side-item button button--transparent" href="form-authorization.html">Войти</a>
+                <?php endif; ?>
+            </div>
         </header>
 
         <div class="content">
