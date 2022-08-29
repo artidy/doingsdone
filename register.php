@@ -1,6 +1,7 @@
 <?php
 /**
  * @var $connect mysqli - подключение к базе данных
+ * @var $title string - заголовок проекта
  */
 session_start();
 require_once("config.php");
@@ -61,7 +62,7 @@ $register_content = include_template("register.php", [
 ]);
 
 $layout_content = include_template("layout.php", [
-    "title" => "Дела в порядке",
+    "title" => $title,
     "template" => $register_content,
 ]);
 

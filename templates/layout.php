@@ -5,6 +5,7 @@
  * @var $title string - заголовок страницы
  * @var $template string - основной контент страницы
  * @var $user array - данные авторизованого пользователя
+ * @var $background_class - Оформление блока body
  */
 ?>
 <!DOCTYPE html>
@@ -18,11 +19,11 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body <?= isset($user) ? "" : "class='body-background'"; ?>>
+<body <?= isset($background_class) ? "" : "class=$background_class"; ?>>
 <h1 class="visually-hidden"><?=htmlspecialchars($title); ?></h1>
 
 <div class="page-wrapper">
-    <div class="container <?= isset($user) ? "container--with-sidebar" : ""; ?>">
+    <div class="container <?= isset($background_class) ? "" : "container--with-sidebar"; ?>">
         <header class="main-header">
             <a href="/">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">

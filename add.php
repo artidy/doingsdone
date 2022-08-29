@@ -2,6 +2,7 @@
 /**
  * Сценарий для добавления задач
  * @var $connect mysqli - подключение к базе данных
+ * @var $title string - заголовок проекта
  */
 session_start();
 require_once("config.php");
@@ -77,7 +78,7 @@ $main_template = include_template("main.php", [
 ]);
 
 $layout_template = include_template("layout.php", [
-    "title" => "Дела в порядке",
+    "title" => $title,
     "template" => $main_template,
 ]);
 
