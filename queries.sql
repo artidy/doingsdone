@@ -3,9 +3,9 @@ USE
 
 -- Добавление тестовых пользователей
 INSERT INTO users (email, name, password)
-VALUES ('test@test.com', 'Лариса', MD5('123456')),
-       ('test1@test.com', 'Виктор', MD5('321456')),
-       ('test2@test.com', 'Владик', MD5('654321'));
+VALUES ('test@test.com', 'Лариса', '$2y$10$.wGK7VFm8sq9qpZRaQu1keYQjf3hPo8n/8zZnKlcgyln9i7XzbI/.'), -- password 123456
+       ('test1@test.com', 'Виктор', '$2y$10$H/Au8xLSPpH25f6DUUQodOyKvyQz2J.D.0cfHN7ggrvmFJtEJyfG.'), -- password 321456
+       ('test2@test.com', 'Владик', '$2y$10$3i3SzMcKk/5EVEepj8AZWuhLhU0W8S1v8ThQf2ldpY6Eg/h4pEFii'); -- password 654321
 
 -- Добавление тестовых данных по проектам
 INSERT INTO projects (title, author_id)

@@ -7,12 +7,20 @@
  *     project:string, is_complited:bool, project_id:string, file_path:string}> - массив задач по проектам
  * @var $show_complete_tasks bool - статус отображения выполненных задач
  * @var $project_id string - идентификатор выбранного проекта
+ * @var $search string - поисковой запрос
  */
 ?>
 <h2 class="content__main-heading">Список задач</h2>
 
-<form class="search-form" action="index.php" method="post" autocomplete="off">
-    <input class="search-form__input" type="text" name="" value="" placeholder="Поиск по задачам">
+<form class="search-form" action="/" method="get" autocomplete="off">
+    <input
+        class="search-form__input"
+        type="text"
+        id="search"
+        name="search"
+        value="<?= $search; ?>"
+        placeholder="Поиск по задачам"
+    >
 
     <input class="search-form__submit" type="submit" name="" value="Искать">
 </form>
@@ -36,7 +44,15 @@
 </div>
 
 <table class="tasks">
-    <?php foreach ($tasks as $task):
+    <?php if (count($tasks) === 0 && $search !== ""): ?>
+        Ничего не найдено по вашему запросу
+    <?php endif;
+
+    if (count($tasks) === 0 && $search === ""): ?>
+    Нет ни одной задачи
+    <?php endif;
+
+    foreach ($tasks as $task):
         if ($task["is_completed"] && !$show_complete_tasks ||
             $project_id !== "" && $task["project_id"] !== $project_id) {
             continue;

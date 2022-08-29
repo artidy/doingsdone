@@ -23,13 +23,17 @@ if ($project_id && !isExistProject($project_id, $projects)) {
 }
 
 $show_complete_tasks = rand(0, 1);
-$tasks = normalizeTasks(getUserTasks($connect, $user["id"]));
+$search = (string) (filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS) ?? "");
+$tasks = $search === "" ?
+    normalizeTasks(getUserTasks($connect, $user["id"])) :
+    normalizeTasks(getUserTasksSearch($connect, $user["id"], $search));
 
 $tasks_content = include_template("tasks.php", [
     "projects" => $projects,
     "tasks" => $tasks,
     "show_complete_tasks" => $show_complete_tasks,
     "project_id" => $project_id,
+    "search" => $search,
 ]);
 
 $main_template = include_template("main.php", [

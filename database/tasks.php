@@ -23,6 +23,32 @@ function getUserTasks(mysqli $connect, int $user_id): array
 }
 
 /**
+ * Функция для получения массива задач пользователя по поисковому запросу
+ * @param mysqli $connect
+ * @param int $user_id
+ * @param string $search
+ * @return array
+ */
+function getUserTasksSearch(mysqli $connect, int $user_id, string $search): array
+{
+    $query = "SELECT
+       tasks.id,
+       tasks.title,
+       status,
+       deadline,
+       file_path,
+       project_id,
+       projects.title as project
+    FROM tasks
+        INNER JOIN projects on tasks.project_id = projects.id
+    WHERE
+        tasks.author_id = ? AND
+        MATCH(tasks.title) AGAINST(? IN BOOLEAN MODE)";
+
+    return fetchData(prepareResult($connect, $query, "is", [$user_id, "$search*"]));
+}
+
+/**
  * Функция для добавления задачи
  * @param mysqli $connect
  * @param array $task
