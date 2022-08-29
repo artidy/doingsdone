@@ -4,6 +4,7 @@
  *
  * @var $title string - заголовок страницы
  * @var $template string - основной контент страницы
+ * @var $user array - данные авторизованого пользователя
  */
 ?>
 <!DOCTYPE html>
@@ -27,17 +28,19 @@
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
 
-            <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="add">Добавить задачу</a>
+            <?php if (isset($user)): ?>
+                <div class="main-header__side">
+                    <a class="main-header__side-item button button--plus open-modal" href="add">Добавить задачу</a>
 
-                <div class="main-header__side-item user-menu">
-                    <div class="user-menu__data">
-                        <p>Константин</p>
+                    <div class="main-header__side-item user-menu">
+                        <div class="user-menu__data">
+                            <p><?= $user["name"]; ?></p>
 
-                        <a href="#">Выйти</a>
+                            <a href="#">Выйти</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
         </header>
 
         <div class="content">
@@ -54,7 +57,9 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <a class="main-footer__button button button--plus" href="add">Добавить задачу</a>
+        <?php if (isset($user)): ?>
+            <a class="main-footer__button button button--plus" href="add">Добавить задачу</a>
+        <?php endif; ?>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
