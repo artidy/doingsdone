@@ -49,6 +49,34 @@ function getUserTasksSearch(mysqli $connect, int $user_id, string $search): arra
 }
 
 /**
+ * Функция для получения массива задач на дату дедлайна
+ * @param mysqli $connect
+ * @param string $deadline
+ * @return array
+ */
+function getTasksByDeadline(mysqli $connect, string $deadline): array
+{
+    $query = "SELECT
+       tasks.id,
+       tasks.title,
+       status,
+       deadline,
+       file_path,
+       project_id,
+       projects.title as project,
+       users.name,
+       users.email,
+       tasks.author_id
+    FROM tasks
+        INNER JOIN projects on tasks.project_id = projects.id
+        INNER JOIN users on projects.author_id = users.id
+    WHERE tasks.deadline = ? AND status = 0 
+    ORDER BY tasks.author_id";
+
+    return fetchData(prepareResult($connect, $query, "s", [$deadline]));
+}
+
+/**
  * Функция для добавления задачи
  * @param mysqli $connect
  * @param array $task
