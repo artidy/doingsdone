@@ -66,14 +66,24 @@
                     <?=!$task["is_completed"] && $restOfTime && $restOfTime <= 24 ? "task--important" : ""; ?>"
         >
             <td class="task__select">
-                <label class="checkbox task__checkbox">
+                <form action="status" method="post">
+                    <label class="checkbox task__checkbox">
+                        <input
+                            class="checkbox__input visually-hidden"
+                            type="checkbox"
+                            name="status"
+                            onchange="submit()"
+                            <?=$task["is_completed"] ? "checked" : ""; ?>
+                        >
+                        <span class="checkbox__text"><?=htmlspecialchars($task["title"]); ?></span>
+                    </label>
                     <input
-                        class="checkbox__input visually-hidden"
-                        type="checkbox"
-                        <?=$task["is_completed"] ? "checked" : ""; ?>
+                        class="visually-hidden"
+                        type="text"
+                        name="task_id"
+                        value="<?= $task["id"]; ?>"
                     >
-                    <span class="checkbox__text"><?=htmlspecialchars($task["title"]); ?></span>
-                </label>
+                </form>
             </td>
             <td class="task__file">
                 <?php if ($task["file_path"]): ?>
