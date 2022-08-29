@@ -3,10 +3,15 @@
  * Сценарий главной страницы
  * @var $connect mysqli - подключение к базе данных
  */
-
+session_start();
 require_once("config.php");
 require_once("db.php");
 require_once("helpers.php");
+
+$user = getUserAuthentication();
+if (count($user) === 0) {
+    redirectTo("/register");
+}
 
 $user_id = 2;
 $project_id = (string) (filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_SPECIAL_CHARS) ?? null);

@@ -432,3 +432,76 @@ function addDate(string $web_name, array $result, string $field): array {
     header("Location: $page");
     exit();
 }
+
+/**
+ * Функция для получения текущего авторизованного пользователя
+ * @return array Данные авторизованного пользователя
+ */
+function getUserAuthentication(): array
+{
+    return $_SESSION['user'] ?? [];
+}
+
+/**
+ * Функция для обработки email
+ * @param string $field Идентификатор поля в базе данных
+ * @param string $web_name Идентификатор поля на форме
+ * @param array $result Результат проверки формы
+ * @param mysqli $connect Подключение к базе данных
+ * @return array Результат проверки формы
+ */
+function addEmail(string $field, string $web_name, array $result, mysqli $connect): array
+{
+    $result["errors"] = addError($result["errors"], checkFilling($web_name), $web_name);
+    if ($_POST[$web_name] === "") {
+        return $result;
+    }
+
+    $result[$field] = $_POST[$web_name];
+
+    $result["errors"] = addError($result["errors"], checkLength($result[$field], 320), $web_name);
+
+    $email = filter_var($result[$field], FILTER_VALIDATE_EMAIL);
+    if (!$email) {
+        $result["errors"] = addError($result["errors"], "Неверно заполнен email", $web_name);
+        return $result;
+    }
+
+    $user = getUserByEmail($connect, $email);
+    if (count($user) > 0) {
+        $result["errors"] = addError($result["errors"], "Пользователь с таким email уже существует", $web_name);
+        return $result;
+    }
+
+    return $result;
+}
+
+/**
+ * Функция для получения хеша пароля
+ * @param string $password Пароль для которого необходимо получить хэш
+ * @return string Хэш пароля
+ */
+function getHashPassword(string $password): string
+{
+    return password_hash($password, PASSWORD_DEFAULT);
+}
+
+/**
+ * Функция для обработки пароля
+ * @param string $field Идентификатор поля в базе данных
+ * @param string $web_name Идентификатор поля на форме
+ * @param array $result Результат проверки формы
+ * @return array Результат проверки формы
+ */
+function addPassword(string $field, string $web_name, array $result): array
+{
+    $result["errors"] = addError($result["errors"], checkFilling($web_name), $web_name);
+
+    if (count($result["errors"]) > 0) {
+        return $result;
+    }
+
+    $result[$field] = getHashPassword($_POST[$web_name]);
+
+    return $result;
+}
