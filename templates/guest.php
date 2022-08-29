@@ -14,5 +14,5 @@
         <p>После создания аккаунта, пользователь может начать вносить свои дела, деля их по проектам и указывая сроки.</p>
     </div>
 
-    <a class="welcome__button button" href="register.html">Зарегистрироваться</a>
+    <a class="welcome__button button" href="register">Зарегистрироваться</a>
 </section>

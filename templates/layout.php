@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body <?= isset($background_class) ? "" : "class=$background_class"; ?>>
+<body <?= isset($background_class) ? "class=$background_class" : ""; ?>>
 <h1 class="visually-hidden"><?=htmlspecialchars($title); ?></h1>
 
 <div class="page-wrapper">
