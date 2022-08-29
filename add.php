@@ -11,7 +11,7 @@ require_once("helpers.php");
 
 $user = getUserAuthentication();
 if (count($user) === 0) {
-    redirectTo("/register");
+    redirectTo("/");
 }
 
 $projects = normalizeProjects(getUserProjects($connect, $user["id"]));
