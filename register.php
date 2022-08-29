@@ -12,7 +12,6 @@ if (count(getUserAuthentication()) > 0) {
     redirectTo("/");
 }
 
-$errors = [];
 $result = [
     "email" => "",
     "name" => "",
@@ -41,9 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $errors = $result["errors"];
-
-    if (count($errors) === 0) {
+    if (count($result["errors"]) === 0) {
         $new_post_id = addUser(
             $connect,
             [

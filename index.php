@@ -42,6 +42,7 @@ $main_template = include_template("main.php", [
 $layout_template = include_template("layout.php", [
     "title" => $title,
     "template" => $main_template,
+    "user" => $user,
 ]);
 
 print($layout_template);

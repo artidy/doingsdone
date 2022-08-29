@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 <?php else: ?>
-                    <a class="main-header__side-item button button--transparent" href="form-authorization.html">Войти</a>
+                    <a class="main-header__side-item button button--transparent" href="auth">Войти</a>
                 <?php endif; ?>
             </div>
         </header>
