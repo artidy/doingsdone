@@ -5,6 +5,7 @@
  * @var $title string - заголовок страницы
  * @var $template string - основной контент страницы
  * @var $user array - данные авторизованого пользователя
+ * @var $background_class - Оформление блока body
  */
 ?>
 <!DOCTYPE html>
@@ -18,29 +19,31 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body>
+<body <?= isset($background_class) ? "class=$background_class" : ""; ?>>
 <h1 class="visually-hidden"><?=htmlspecialchars($title); ?></h1>
 
 <div class="page-wrapper">
-    <div class="container container--with-sidebar">
+    <div class="container <?= isset($background_class) ? "" : "container--with-sidebar"; ?>">
         <header class="main-header">
             <a href="/">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
 
-            <?php if (isset($user)): ?>
-                <div class="main-header__side">
+            <div class="main-header__side">
+                <?php if (isset($user)): ?>
                     <a class="main-header__side-item button button--plus open-modal" href="add">Добавить задачу</a>
 
                     <div class="main-header__side-item user-menu">
                         <div class="user-menu__data">
                             <p><?= $user["name"]; ?></p>
 
-                            <a href="#">Выйти</a>
+                            <a href="logout">Выйти</a>
                         </div>
                     </div>
-                </div>
-            <?php endif; ?>
+                <?php else: ?>
+                    <a class="main-header__side-item button button--transparent" href="auth">Войти</a>
+                <?php endif; ?>
+            </div>
         </header>
 
         <div class="content">

@@ -246,6 +246,25 @@ function normalizeTasks(array $tasks): array
 }
 
 /**
+ * Функция-адаптер для пользователя
+ * @param array $user Данные пользователя из базы данных
+ * @return array Данные пользователя для работы на сайте
+ */
+function normalizeUser(array $user): array
+{
+    if ($user === []) {
+        return $user;
+    }
+
+    return [
+        "id" => (string) $user["id"],
+        "email" => $user["email"],
+        "name" => $user["name"],
+        "registered_at" => $user["registered_at"],
+    ];
+}
+
+/**
  * Функция для проверки заполнения поля
  * @param string $field_name Идентификатор поля
  * @return string Описание ошибки

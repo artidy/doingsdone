@@ -1,6 +1,7 @@
 <?php
 /**
  * @var $connect mysqli - подключение к базе данных
+ * @var $title string - заголовок проекта
  */
 session_start();
 require_once("config.php");
@@ -11,7 +12,6 @@ if (count(getUserAuthentication()) > 0) {
     redirectTo("/");
 }
 
-$errors = [];
 $result = [
     "email" => "",
     "name" => "",
@@ -40,9 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $errors = $result["errors"];
-
-    if (count($errors) === 0) {
+    if (count($result["errors"]) === 0) {
         $new_post_id = addUser(
             $connect,
             [
@@ -61,7 +59,7 @@ $register_content = include_template("register.php", [
 ]);
 
 $layout_content = include_template("layout.php", [
-    "title" => "Дела в порядке",
+    "title" => $title,
     "template" => $register_content,
 ]);
 

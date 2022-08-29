@@ -2,6 +2,7 @@
 /**
  * Сценарий для добавления задач
  * @var $connect mysqli - подключение к базе данных
+ * @var $title string - заголовок проекта
  */
 session_start();
 require_once("config.php");
@@ -10,18 +11,17 @@ require_once("helpers.php");
 
 $user = getUserAuthentication();
 if (count($user) === 0) {
-    redirectTo("/register");
+    redirectTo("/");
 }
 
-$user_id = 2;
-$projects = normalizeProjects(getUserProjects($connect, $user_id));
+$projects = normalizeProjects(getUserProjects($connect, $user["id"]));
 $errors = [];
 $result = [
     "title" => "",
     "deadline" => null,
     "file_path" => null,
     "project_id" => "",
-    "author_id" => $user_id,
+    "author_id" => $user["id"],
     "errors" => [],
     "tmp_path" => "",
     "file_name" => "",
@@ -71,14 +71,15 @@ $add_content = include_template("add.php", [
 
 $main_template = include_template("main.php", [
     "projects" => $projects,
-    "tasks" => normalizeTasks(getUserTasks($connect, $user_id)),
+    "tasks" => normalizeTasks(getUserTasks($connect, $user["id"])),
     "project_id" => null,
     "main_content" => $add_content,
 ]);
 
 $layout_template = include_template("layout.php", [
-    "title" => "Дела в порядке",
+    "title" => $title,
     "template" => $main_template,
+    "user" => $user,
 ]);
 
 print($layout_template);
