@@ -43,9 +43,9 @@ function getUserTasksSearch(mysqli $connect, int $user_id, string $search): arra
         INNER JOIN projects on tasks.project_id = projects.id
     WHERE
         tasks.author_id = ? AND
-        MATCH(tasks.title) AGAINST(?)";
+        MATCH(tasks.title) AGAINST(? IN BOOLEAN MODE)";
 
-    return fetchData(prepareResult($connect, $query, "is", [$user_id, $search]));
+    return fetchData(prepareResult($connect, $query, "is", [$user_id, "$search*"]));
 }
 
 /**
