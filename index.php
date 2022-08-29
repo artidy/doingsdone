@@ -22,11 +22,35 @@ if ($project_id && !isExistProject($project_id, $projects)) {
     die();
 }
 
-$show_complete_tasks = rand(0, 1);
+$show_complete_tasks = (bool) (filter_input(INPUT_GET, 'show_completed', FILTER_SANITIZE_SPECIAL_CHARS) ?? false);
+$filter = (string) (filter_input(INPUT_GET, 'filter', FILTER_SANITIZE_SPECIAL_CHARS) ?? "");
 $search = (string) (filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS) ?? "");
 $tasks = $search === "" ?
     normalizeTasks(getUserTasks($connect, $user["id"])) :
     normalizeTasks(getUserTasksSearch($connect, $user["id"], $search));
+
+switch ($filter) {
+    case "today":
+        $tasks = array_filter($tasks, function ($task) {
+            return isCurrentDate($task["deadline"]);
+        });
+        break;
+    case "tomorrow":
+        $tasks = array_filter($tasks, function ($task) {
+            return isTomorrowDate($task["deadline"]);
+        });
+        break;
+    case "overdue":
+        $tasks = array_filter($tasks, function ($task) {
+            return isOverdueDate($task["deadline"]);
+        });
+        break;
+}
+
+$project_id_param = $project_id === "" ? "" : "project_id=$project_id";
+$completed_param = $show_complete_tasks ? "show_completed=1" : "";
+$filter_param = $filter === "" ? "" : "filter=$filter";
+$search_param = $search === "" ? "" : "search=$search";
 
 $tasks_content = include_template("tasks.php", [
     "projects" => $projects,
@@ -34,6 +58,11 @@ $tasks_content = include_template("tasks.php", [
     "show_complete_tasks" => $show_complete_tasks,
     "project_id" => $project_id,
     "search" => $search,
+    "filter" => $filter,
+    "project_id_param" => $project_id_param,
+    "completed_param" => $completed_param,
+    "filter_param" => $filter_param,
+    "search_param" => $search_param,
 ]);
 
 $main_template = include_template("main.php", [
@@ -41,6 +70,10 @@ $main_template = include_template("main.php", [
     "tasks" => $tasks,
     "project_id" => $project_id,
     "main_content" => $tasks_content,
+    "project_id_param" => $project_id_param,
+    "completed_param" => $completed_param,
+    "filter_param" => $filter_param,
+    "search_param" => $search_param,
 ]);
 
 $layout_template = include_template("layout.php", [

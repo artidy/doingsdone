@@ -8,11 +8,24 @@
  * @var $show_complete_tasks bool - статус отображения выполненных задач
  * @var $project_id string - идентификатор выбранного проекта
  * @var $search string - поисковой запрос
+ * @var $filter string - текущий фильтр задач
+ * @var $project_id_param string - строка запроса для проектов
+ * @var $completed_param string - строка запроса для отображения завершенных проектов
+ * @var $filter_param string - строка запроса фильтров
+ * @var $search_param string - строка запроса поиска
  */
 ?>
 <h2 class="content__main-heading">Список задач</h2>
 
-<form class="search-form" action="/" method="get" autocomplete="off">
+<form
+    class="search-form"
+    action="/"
+    method="get"
+    autocomplete="off"
+>
+    <input class="visually-hidden" type="text" name="project_id" value="<?= $project_id; ?>">
+    <input class="visually-hidden" type="text" name="show_completed" value="<?= $show_complete_tasks; ?>">
+    <input class="visually-hidden" type="text" name="filter" value="<?= $filter; ?>">
     <input
         class="search-form__input"
         type="text"
@@ -27,10 +40,22 @@
 
 <div class="tasks-controls">
     <nav class="tasks-switch">
-        <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-        <a href="/" class="tasks-switch__item">Повестка дня</a>
-        <a href="/" class="tasks-switch__item">Завтра</a>
-        <a href="/" class="tasks-switch__item">Просроченные</a>
+        <a href="<?= getQueryParams([$project_id_param, $completed_param, $search_param]); ?>"
+           class="tasks-switch__item <?= $filter === "" ? "tasks-switch__item--active" : ""; ?>">
+            Все задачи
+        </a>
+        <a href="<?= getQueryParams([$project_id_param, $completed_param, "filter=today", $search_param]); ?>"
+           class="tasks-switch__item <?= $filter === "today" ? "tasks-switch__item--active" : ""; ?>">
+            Повестка дня
+        </a>
+        <a href="<?= getQueryParams([$project_id_param, $completed_param, "filter=tomorrow", $search_param]); ?>"
+           class="tasks-switch__item <?= $filter === "tomorrow" ? "tasks-switch__item--active" : ""; ?>">
+            Завтра
+        </a>
+        <a href="<?= getQueryParams([$project_id_param, $completed_param, "filter=overdue", $search_param]); ?>"
+           class="tasks-switch__item <?= $filter === "overdue" ? "tasks-switch__item--active" : ""; ?>">
+            Просроченные
+        </a>
     </nav>
 
     <label class="checkbox">
