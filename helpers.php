@@ -393,12 +393,13 @@ function addTextContent(string $web_name, array $result, string $field,
 
 /**
  * Функция проверки существования проекта
- * @param string $project_id Индентификатор проекта
+ * @param string $search_value Значение поиска проекта
  * @param array $projects Массив существующих проектов
+ * @param string $project_column Имя поля проекта
  * @return bool Результат проверки проекта
  */
-function isExistProject(string $project_id, array $projects): bool {
-    return in_array($project_id, array_column($projects, "id"));
+function isExistProject(string $search_value, array $projects, string $project_column = "id"): bool {
+    return in_array($search_value, array_column($projects, $project_column));
 }
 
 /**
