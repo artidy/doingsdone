@@ -20,8 +20,10 @@ $errors = $result["errors"];
             <label class="form__label" for="email">E-mail <sup>*</sup></label>
             <input
                 class="form__input <?= isset($errors["email"]) ? "form__input--error" : "" ?>"
-                type="text" name="email"
-                id="email" value=""
+                type="text"
+                name="email"
+                id="email"
+                value="<?= $result["email"]; ?>"
                 placeholder="Введите e-mail"
             >
             <?= include_template("error.php", [
@@ -36,7 +38,7 @@ $errors = $result["errors"];
                 type="password"
                 name="password"
                 id="password"
-                value=""
+                value="<?= $result["password"]; ?>"
                 placeholder="Введите пароль"
             >
             <?= include_template("error.php", [
@@ -51,7 +53,7 @@ $errors = $result["errors"];
                 type="text"
                 name="name"
                 id="name"
-                value=""
+                value="<?= $result["name"]; ?>"
                 placeholder="Введите имя"
             >
             <?= include_template("error.php", [
