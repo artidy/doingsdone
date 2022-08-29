@@ -74,3 +74,20 @@ function addTask(mysqli $connect, array $task): string
 
     return getInsertId($connect);
 }
+
+/**
+ * Функция для смены статуса задачи
+ * @param mysqli $connect
+ * @param bool $status
+ * @param string $author_id
+ * @param string $task_id
+ * @return string
+ */
+function toggleTaskStatus(mysqli $connect, bool $status, string $author_id, string $task_id): string
+{
+    $query = "UPDATE tasks SET status=? WHERE author_id=? AND id=?";
+
+    preparePostResult($connect, $query, "iii", [$status, $author_id, $task_id]);
+
+    return getInsertId($connect);
+}

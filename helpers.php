@@ -443,6 +443,45 @@ function addDate(string $web_name, array $result, string $field): array {
 }
 
 /**
+ * Функция проверки просроченной даты дедлайна
+ * @param string $task_date Дата дедлайна
+ * @return bool
+ */
+function isOverdueDate(string $task_date): bool
+{
+    $current_date_timestamp = date_create("today")->getTimestamp();
+    $date_timestamp = strtotime($task_date);
+
+    return $current_date_timestamp > $date_timestamp;
+}
+
+/**
+ * Функция проверки совпадения текущей даты и даты дедлайна
+ * @param string $task_date Дата дедлайна
+ * @return bool
+ */
+function isCurrentDate(string $task_date): bool
+{
+    $current_date_timestamp = date_create("today")->getTimestamp();
+    $date_timestamp = strtotime($task_date);
+
+    return $current_date_timestamp === $date_timestamp;
+}
+
+/**
+ * Функция проверки совпадения завтрашней даты и даты дедлайна
+ * @param string $task_date Дата дедлайна
+ * @return bool
+ */
+function isTomorrowDate(string $task_date): bool
+{
+    $current_date_timestamp = date_create("tomorrow")->getTimestamp();
+    $date_timestamp = strtotime($task_date);
+
+    return $current_date_timestamp === $date_timestamp;
+}
+
+/**
  * Функция для перенаправления на другую страницу
  * @param string $page Страница перенаправления
  * @return void
@@ -522,6 +561,25 @@ function addPassword(string $field, string $web_name, array $result): array
     }
 
     $result[$field] = getHashPassword($_POST[$web_name]);
+
+    return $result;
+}
+
+/**
+ * Функция для генерации строки запроса
+ * @param array $queryParams Параметры запроса страницы
+ * @return string Готовая строка запроса
+ */
+function getQueryParams(array $queryParams): string
+{
+    $result = "/";
+
+    foreach ($queryParams as $queryParam) {
+        if ($queryParam !== "") {
+            $param = $result === "/" ? "?$queryParam" : "&$queryParam";
+            $result = $result . $param;
+        }
+    }
 
     return $result;
 }
